@@ -151,18 +151,16 @@ void BeginIntermission (edict_t *targ)
 
 void Serverwide_ScoreboardMessage(edict_t *ent)
 {
-char	entry[1024];
-	char	string[1400];
+	char	entry[1024] = { 0 };
+	char	string[1400] = { 0 };
 	int		stringlength;
 	int		i, j, k;
-	int		sorted[MAX_CLIENTS];
-	int		sortedscores[MAX_CLIENTS];
+	int		sorted[MAX_CLIENTS] = { 0 };
+	int		sortedscores[MAX_CLIENTS] = { 0 };
 	int		score, total;
-	int		picnum;
-	int		x, y;
+	int		y;
 	gclient_t	*cl;
 	edict_t		*cl_ent;
-	char	*tag;
 	
 	char p_name[100];
 	char tempentry[1024];	// sort the clients by score
@@ -212,7 +210,6 @@ char	entry[1024];
 		cl = &game.clients[sorted[i]];
 		cl_ent = g_edicts + 1 + sorted[i];
 		
-		x = 32; 
 		y = 48 + 8 * i; 
 		
 		if (cl->resp.team > -1)

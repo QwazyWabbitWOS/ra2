@@ -505,10 +505,8 @@ void Cmd_menuhelp_f(edict_t* ent)
 		"H| to navigate the menu\n"
 		"H| invuse (ENTER) selects\n"
 		"H| inven (TAB) toggles it on/off\n");
-
-
-
 }
+
 /*******
 Cmd_admin_f - parse admin command and display menu
 ********/
@@ -539,9 +537,6 @@ void Cmd_admin_f(edict_t* ent)
 	{
 		gi.cprintf(ent, PRINT_HIGH, "Sorry, incorrect admin code\n");
 	}
-
-
-
 }
 
 /*******

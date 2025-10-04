@@ -1671,10 +1671,8 @@ void ClientBeginServerFrame (edict_t *ent)
 			else
 				buttonMask = -1;
 //arena 
-			/*
 			if ( ( client->latched_buttons & buttonMask ) ||
-				(deathmatch->value && ((int)dmflags->value & DF_FORCE_RESPAWN) ) )
-				*/
+				(deathmatch->value /* && ((int)dmflags->value & DF_FORCE_RESPAWN)*/)) //QW//
 			{
 				respawn(ent);
 				client->latched_buttons = 0;

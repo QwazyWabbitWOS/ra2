@@ -919,8 +919,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 
 	//arena
 	if (!(ent->client->buttons & BUTTON_ATTACK) ||
-		ent->takedamage == DAMAGE_NO ||
-		ent->client && arenas[ent->client->resp.context].game_state != GAME_ON)
+		ent->takedamage == DAMAGE_NO || (ent->client && arenas[ent->client->resp.context].game_state != GAME_ON))
 	{
 		ent->client->ps.gunframe++;
 	}

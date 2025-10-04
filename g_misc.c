@@ -459,7 +459,7 @@ void SP_point_combat (edict_t *self)
 	VectorSet (self->maxs, 8, 8, 16);
 	self->svflags = SVF_NOCLIENT;
 	gi.linkentity (self);
-};
+}
 
 
 /*QUAKED viewthing (0 .5 .8) (-8 -8 -8) (8 8 8)
@@ -494,7 +494,7 @@ Used as a positional target for spotlights, etc.
 void SP_info_null (edict_t *self)
 {
 	G_FreeEdict (self);
-};
+}
 
 
 /*QUAKED info_notnull (0 0.5 0) (-4 -4 -4) (4 4 4)
@@ -504,7 +504,7 @@ void SP_info_notnull (edict_t *self)
 {
 	VectorCopy (self->s.origin, self->absmin);
 	VectorCopy (self->s.origin, self->absmax);
-};
+}
 
 
 /*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) START_OFF
@@ -897,7 +897,7 @@ void barrel_explode (edict_t *self)
 	ThrowDebris (self, "models/objects/debris3/tris.md2", spd, org);
 
 	// a bunch of little chunks
-	spd = 2 * self->dmg / 200;
+	spd = 2.0f * self->dmg / 200;
 	org[0] = self->s.origin[0] + crandom() * self->size[0];
 	org[1] = self->s.origin[1] + crandom() * self->size[1];
 	org[2] = self->s.origin[2] + crandom() * self->size[2];

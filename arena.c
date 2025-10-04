@@ -689,6 +689,7 @@ void track_prev(edict_t *ent)
 {
 	track_change(ent,-1);
 }
+
 void SetObserverMode(edict_t *ent)
 {
 		int i;
@@ -2018,7 +2019,7 @@ void SP_func_illusionary (edict_t *self)
 	self->solid = SOLID_NOT;
 	gi.setmodel (self, self->model);
 	gi.linkentity(self);
-};
+}
 
 /*QUAKED info_teleport_destination (1 0 0) (-16 -16 -24) (16 16 32)
 */
