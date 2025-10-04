@@ -181,8 +181,6 @@ item that is removed is returned, or NULL if not found
 *******/
 arena_link_t *remove_from_queue(arena_link_t *t, arena_link_t *que)
 {
-	arena_link_t *got = NULL;
-
 	if(!t) 
 		if (que)
 			t = que->next;
@@ -328,14 +326,14 @@ void give_ammo(edict_t *e)
 		e->client->pers.selected_item = e->client->ps.stats[STAT_SELECTED_ITEM] = ITEM_INDEX(rl);
 	}		
 // give ammo
-	if(it = FindItemByClassname("ammo_shells")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.shells;	//shells	100
-	if(it = FindItemByClassname("ammo_bullets")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.bullets;	//bullets       200
-	if(it = FindItemByClassname("ammo_slugs")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.slugs;	//slugs	 50
-	if(it = FindItemByClassname("ammo_grenades")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.grenades;	//grenades      50
-	if(it = FindItemByClassname("ammo_rockets")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.rockets;	//rockets       50
-	if(it = FindItemByClassname("ammo_cells")) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.cells;	//cells	 200
+	if((it = FindItemByClassname("ammo_shells"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.shells;	//shells	100
+	if((it = FindItemByClassname("ammo_bullets"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.bullets;	//bullets       200
+	if((it = FindItemByClassname("ammo_slugs"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.slugs;	//slugs	 50
+	if((it = FindItemByClassname("ammo_grenades"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.grenades;	//grenades      50
+	if((it = FindItemByClassname("ammo_rockets"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.rockets;	//rockets       50
+	if((it = FindItemByClassname("ammo_cells"))) e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.cells;	//cells	 200
 // give body armor
-	if(it = FindItemByClassname("item_armor_body")) {
+	if((it = FindItemByClassname("item_armor_body"))) {
 //		if(a->settings.armor) {
 			e->client->pers.inventory[ITEM_INDEX(it)] = a->settings.armor;
 //		} else {
@@ -343,7 +341,7 @@ void give_ammo(edict_t *e)
 //		}
 	}
 	if(allow_grapple)
-		if(it = FindItem("Grapple")) e->client->pers.inventory[ITEM_INDEX(it)] = 1;
+		if((it = FindItem("Grapple"))) e->client->pers.inventory[ITEM_INDEX(it)] = 1;
 }
 
 
@@ -490,7 +488,6 @@ edict_t *SelectFarthestArenaSpawnPoint (char *classn, int arena)
 	edict_t	*bestspot;
 	float	bestdistance, bestplayerdistance;
 	edict_t	*spot;
-	int		count = 0;
 
 
 	spot = NULL;
@@ -535,12 +532,9 @@ void track_SetStats(edict_t *ent)
 
 void eyecam_think(edict_t *ent, usercmd_t *ucmd)
 {
-	qboolean blocked = false;
 	int i;
 	vec3_t look, delta;
 	vec3_t odd = { 0, 0, 0 };
-	vec3_t	mins = {-16, -16, -24};
-	vec3_t	maxs = {16, 16, 32};
 	edict_t *targ = ent->client->resp.track_targ;
 
 	if(!targ || targ->client->resp.flag != ARENA_PLAYER) {
@@ -772,8 +766,6 @@ extern void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 
 void move_to_arena (edict_t *ent, int arena, qboolean observer)
 {
-	vec3_t	mins = {-16, -16, -24};
-	vec3_t	maxs = {16, 16, 32};
 
 	edict_t	*dest;
 	int i;
@@ -1057,7 +1049,6 @@ AddtoArena - called by team leader when he selects an arena, returns 0 if sucess
 *******/
 int AddtoArena(edict_t *ent, int arena, qboolean force, qboolean observeonly)
 {
-	int i=0;
 	int tcount;
 	
 	
@@ -1252,7 +1243,7 @@ void show_string(int priority, char *s, int context)
 stuffcmd
 *******/
 void stuffcmd(edict_t *e, char *s) {
-        gi.WriteByte (11);
+        gi.WriteByte (svc_stufftext);
         gi.WriteString (s);
         gi.unicast (e, true);
 }
@@ -1407,9 +1398,8 @@ qboolean fill_arena(int context)
 		((arena_team_t *)(((arena_link_t *)(t->it))->it))->in_arena = true;
 
 	}
-	strncpy(arenas[context].teamstr, longstr, MAX_QPATH - 1); //copy max of 63 chars
-	arenas[context].teamstr[MAX_QPATH - 1] = '\0'; //make sure it ends in null
-gi.dprintf("%d: %s\n",context,arenas[context].teamstr);
+	Q_strncpyz(arenas[context].teamstr, sizeof arenas[context].teamstr, longstr); //copy max of 63 chars
+	gi.dprintf("%d: %s\n",context,arenas[context].teamstr);
 	return true;
 	
 }
@@ -1452,53 +1442,54 @@ int fight_done(int context)
 /*******
 CTFSetIDView
 *******/
-static void loc_buildboxpoints(vec3_t p[8], vec3_t org, vec3_t mins, vec3_t maxs)
-{
-	VectorAdd(org, mins, p[0]);
-	VectorCopy(p[0], p[1]);
-	p[1][0] -= mins[0];
-	VectorCopy(p[0], p[2]);
-	p[2][1] -= mins[1];
-	VectorCopy(p[0], p[3]);
-	p[3][0] -= mins[0];
-	p[3][1] -= mins[1];
-	VectorAdd(org, maxs, p[4]);
-	VectorCopy(p[4], p[5]);
-	p[5][0] -= maxs[0];
-	VectorCopy(p[0], p[6]);
-	p[6][1] -= maxs[1];
-	VectorCopy(p[0], p[7]);
-	p[7][0] -= maxs[0];
-	p[7][1] -= maxs[1];
-}
-static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
-{
-	trace_t	trace;
-	vec3_t	targpoints[8];
-	int i;
-	vec3_t viewpoint;
+//static void loc_buildboxpoints(vec3_t p[8], vec3_t org, vec3_t mins, vec3_t maxs)
+//{
+//	VectorAdd(org, mins, p[0]);
+//	VectorCopy(p[0], p[1]);
+//	p[1][0] -= mins[0];
+//	VectorCopy(p[0], p[2]);
+//	p[2][1] -= mins[1];
+//	VectorCopy(p[0], p[3]);
+//	p[3][0] -= mins[0];
+//	p[3][1] -= mins[1];
+//	VectorAdd(org, maxs, p[4]);
+//	VectorCopy(p[4], p[5]);
+//	p[5][0] -= maxs[0];
+//	VectorCopy(p[0], p[6]);
+//	p[6][1] -= maxs[1];
+//	VectorCopy(p[0], p[7]);
+//	p[7][0] -= maxs[0];
+//	p[7][1] -= maxs[1];
+//}
 
-// bmodels need special checking because their origin is 0,0,0
-	if (targ->movetype == MOVETYPE_PUSH)
-		return false; // bmodels not supported
-
-	loc_buildboxpoints(targpoints, targ->s.origin, targ->mins, targ->maxs);
-	
-	VectorCopy(inflictor->s.origin, viewpoint);
-	viewpoint[2] += inflictor->viewheight;
-
-	for (i = 0; i < 8; i++) {
-		trace = gi.trace (viewpoint, vec3_origin, vec3_origin, targpoints[i], inflictor, MASK_SOLID);
-		if (trace.fraction == 1.0)
-			return true;
-	}
-
-	return false;
-}
+//static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
+//{
+//	trace_t	trace;
+//	vec3_t	targpoints[8];
+//	int i;
+//	vec3_t viewpoint;
+//
+//// bmodels need special checking because their origin is 0,0,0
+//	if (targ->movetype == MOVETYPE_PUSH)
+//		return false; // bmodels not supported
+//
+//	loc_buildboxpoints(targpoints, targ->s.origin, targ->mins, targ->maxs);
+//	
+//	VectorCopy(inflictor->s.origin, viewpoint);
+//	viewpoint[2] += inflictor->viewheight;
+//
+//	for (i = 0; i < 8; i++) {
+//		trace = gi.trace (viewpoint, vec3_origin, vec3_origin, targpoints[i], inflictor, MASK_SOLID);
+//		if (trace.fraction == 1.0)
+//			return true;
+//	}
+//
+//	return false;
+//}
 
 void CTFSetIDView(edict_t *ent)
 {
-	vec3_t	forward, dir;
+	vec3_t	forward;
 	trace_t	tr;
 /*	edict_t	*who, *best;
 	float	bd = 0, d;

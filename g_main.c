@@ -51,7 +51,7 @@ void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 void ClientDisconnect (edict_t *ent);
 void ClientBegin (edict_t *ent);
 void ClientCommand (edict_t *ent);
-void RunEntity (edict_t *ent);
+void G_RunEntity (edict_t *ent);
 void WriteGame (char *filename, qboolean autosave);
 void ReadGame (char *filename);
 void WriteLevel (char *filename);
@@ -66,12 +66,8 @@ void G_RunFrame (void);
 void ShutdownGame (void)
 {
 	gi.dprintf ("==== ShutdownGame ====\n");
-GSLogShutdown();//gslog
 	gi.FreeTags (TAG_LEVEL);
 	gi.FreeTags (TAG_GAME);
-#ifndef LINUX
-	wsock32state(0); //arena;
-#endif
 }
 /*
 =================

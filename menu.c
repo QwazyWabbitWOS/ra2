@@ -123,8 +123,6 @@ char *HiPrint(char *text)
 	return text;
 }
 
-#define FANCY_MENUS
-
 void SendMenu(edict_t *ent)
 {
 	gi.WriteByte (0x0D); //configstring
@@ -137,7 +135,7 @@ void SendMenu(edict_t *ent)
 void SendStatusBar(edict_t *ent, char *bar,qboolean force)
 {
 	//gi.dprintf("sendstatusbar: %d\n",level.framenum);
-	strncpy(ent->client->menudata,bar,1400);
+	Q_strncpyz(ent->client->menudata, sizeof ent->client->menudata, bar);
 	ent->client->menuframe = level.framenum+1;
 	if (force)
 	{
@@ -147,8 +145,6 @@ void SendStatusBar(edict_t *ent, char *bar,qboolean force)
 	}
 	else
 		ent->client->menuframe = level.framenum+1;
-	
-
 }
 
 extern char *dm_statusbar; //in g_spawn.c
@@ -166,6 +162,7 @@ void DisplayMenu(edict_t *ent)
 	DisplaySimpMenu(ent);
 	return;
 #endif
+
 	if (!ent->client->showmenu) //clear the old one
 	{
 		if (deathmatch->value)
@@ -194,7 +191,7 @@ void DisplayMenu(edict_t *ent)
 	
 	sprintf(pos,
 		"xv 0 yv 24 cstring2 \"%s\" ",		// menu title
-		menu->it);
+		(char*)menu->it);
 
 	pos = my_statusbar+strlen(my_statusbar);
 
@@ -263,7 +260,7 @@ void DisplayMenu(edict_t *ent)
 void DisplaySimpMenu(edict_t *ent)
 {
 	char	string[1400];
-	int		total;
+	//int		total;
 	arena_link_t *cur, *menu, *selected;
 
 
@@ -275,7 +272,7 @@ void DisplaySimpMenu(edict_t *ent)
 	menu=ent->client->curmenulink->it;
 	selected=ent->client->selected;
 	
-	total = count_queue(menu); // get the menu count
+	//total = count_queue(menu); // get the menu count
 	string[0] = 0;
 	strcat(string, HiPrint(menu->it)); //print title
 	LoPrint(menu->it); //reset it back to the normal state
@@ -293,25 +290,10 @@ void DisplaySimpMenu(edict_t *ent)
 					strcat(string, ((menu_item_t *)cur->it)->valuetext);
 				if (((menu_item_t *)cur->it)->itemvalue >= 0)
 					sprintf(string + strlen(string), "%d", ((menu_item_t *)cur->it)->itemvalue);
-
-				
-        }
-
-
+		}
 	gi.centerprintf(ent, "%s", string);
 }
 
-/*void *giTagMalloc(int size, int level)
-{
-	return malloc(size);
-
-}
-
-void giTagFree(void *ptr)
-{
-	free(ptr);
-}
-*/
 arena_link_t *CreateQMenu(edict_t *ent, char *name)
 {
 	arena_link_t	*menu;
@@ -320,25 +302,26 @@ arena_link_t *CreateQMenu(edict_t *ent, char *name)
 	menu = gi.TagMalloc(sizeof(arena_link_t), TAG_LEVEL);
 	menulink = gi.TagMalloc(sizeof(arena_link_t), TAG_LEVEL);
 	menulink->it = menu;
-	menu->it = gi.TagMalloc(strlen(name)+1, TAG_LEVEL);
+	menu->it = gi.TagMalloc((int)strlen(name)+1, TAG_LEVEL);
 	strcpy(menu->it,name);
 	menu->next = menu->prev = NULL;
 	return menulink;
 }
 
-arena_link_t *AddMenuItem(arena_link_t *menulink, char *itemtext, char *valuetext, int value, void *Callback)
+arena_link_t *AddMenuItem(arena_link_t *menulink, char *itemtext, char *valuetext, int value, 
+	int (*Callback)(edict_t *ent, arena_link_t *menulink, arena_link_t *selected, int key))
 {
 	arena_link_t	*itemlink;
 	menu_item_t	*iteminfo;
 
 	itemlink = gi.TagMalloc(sizeof(arena_link_t), TAG_LEVEL);
 	iteminfo = gi.TagMalloc(sizeof(menu_item_t), TAG_LEVEL);
-//arena
-	iteminfo->itemtext = gi.TagMalloc(strlen(itemtext)+1, TAG_LEVEL);
+	//arena
+	iteminfo->itemtext = gi.TagMalloc((int)strlen(itemtext)+1, TAG_LEVEL);
 	strcpy(iteminfo->itemtext, itemtext);
 	if (valuetext)
 	{
-		iteminfo->valuetext = gi.TagMalloc(strlen(valuetext)+1, TAG_LEVEL);
+		iteminfo->valuetext = gi.TagMalloc((int)strlen(valuetext)+1, TAG_LEVEL);
 		strcpy(iteminfo->valuetext, valuetext);
 	} else
 		iteminfo->valuetext = NULL;
@@ -347,7 +330,6 @@ arena_link_t *AddMenuItem(arena_link_t *menulink, char *itemtext, char *valuetex
 	itemlink->it = iteminfo;
 	add_to_queue(itemlink, menulink->it); //it is the actualy menu
 	return itemlink;
-
 }
 
 void FinishMenu(edict_t *ent, arena_link_t *menulink,int showit)
@@ -403,7 +385,7 @@ void UseMenu(edict_t *ent, int key) //key=1 invuse, key=0 invdrop
 	que=ent->client->curmenulink;
 	if (((menu_item_t *) ent->client->selected->it)->ItemSelect) //if there is a callback
 	{
-		if (ret=((menu_item_t *) ent->client->selected->it)->ItemSelect(ent,que, ent->client->selected, key)) //if the callback didnt return 0, leave
+		if ((ret = ((menu_item_t *) ent->client->selected->it)->ItemSelect(ent,que, ent->client->selected, key))) //if the callback didnt return 0, leave
 		{
 			if (ret == 1)
 				DisplayMenu(ent); //only display the update if it returns 1

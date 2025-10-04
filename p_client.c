@@ -34,7 +34,7 @@ static void SP_FixCoopSpots (edict_t *self)
 		VectorSubtract(self->s.origin, spot->s.origin, d);
 		if (VectorLength(d) < 384)
 		{
-			if ((!self->targetname) || stricmp(self->targetname, spot->targetname) != 0)
+			if ((!self->targetname) || strcmp(self->targetname, spot->targetname) != 0)
 			{
 //				gi.dprintf("FixCoopSpots changed %s at %s targetname from %s to %s\n", self->classname, vtos(self->s.origin), self->targetname, spot->targetname);
 				self->targetname = spot->targetname;
@@ -52,7 +52,7 @@ static void SP_CreateCoopSpots (edict_t *self)
 {
 	edict_t	*spot;
 
-	if(stricmp(level.mapname, "security") == 0)
+	if(strcmp(level.mapname, "security") == 0)
 	{
 		spot = G_Spawn();
 		spot->classname = "info_player_coop";
@@ -90,7 +90,7 @@ void SP_info_player_start(edict_t *self)
 {
 	if (!coop->value)
 		return;
-	if(stricmp(level.mapname, "security") == 0)
+	if(strcmp(level.mapname, "security") == 0)
 	{
 		// invoke one of our gross, ugly, disgusting hacks
 		self->think = SP_CreateCoopSpots;
@@ -123,20 +123,20 @@ void SP_info_player_coop(edict_t *self)
 		return;
 	}
 
-	if((stricmp(level.mapname, "jail2") == 0)   ||
-	   (stricmp(level.mapname, "jail4") == 0)   ||
-	   (stricmp(level.mapname, "mine1") == 0)   ||
-	   (stricmp(level.mapname, "mine2") == 0)   ||
-	   (stricmp(level.mapname, "mine3") == 0)   ||
-	   (stricmp(level.mapname, "mine4") == 0)   ||
-	   (stricmp(level.mapname, "lab") == 0)     ||
-	   (stricmp(level.mapname, "boss1") == 0)   ||
-	   (stricmp(level.mapname, "fact3") == 0)   ||
-	   (stricmp(level.mapname, "biggun") == 0)  ||
-	   (stricmp(level.mapname, "space") == 0)   ||
-	   (stricmp(level.mapname, "command") == 0) ||
-	   (stricmp(level.mapname, "power2") == 0) ||
-	   (stricmp(level.mapname, "strike") == 0))
+	if((strcmp(level.mapname, "jail2") == 0)   ||
+	   (strcmp(level.mapname, "jail4") == 0)   ||
+	   (strcmp(level.mapname, "mine1") == 0)   ||
+	   (strcmp(level.mapname, "mine2") == 0)   ||
+	   (strcmp(level.mapname, "mine3") == 0)   ||
+	   (strcmp(level.mapname, "mine4") == 0)   ||
+	   (strcmp(level.mapname, "lab") == 0)     ||
+	   (strcmp(level.mapname, "boss1") == 0)   ||
+	   (strcmp(level.mapname, "fact3") == 0)   ||
+	   (strcmp(level.mapname, "biggun") == 0)  ||
+	   (strcmp(level.mapname, "space") == 0)   ||
+	   (strcmp(level.mapname, "command") == 0) ||
+	   (strcmp(level.mapname, "power2") == 0) ||
+	   (strcmp(level.mapname, "strike") == 0))
 	{
 		// invoke one of our gross, ugly, disgusting hacks
 		self->think = SP_FixCoopSpots;
@@ -149,7 +149,7 @@ void SP_info_player_coop(edict_t *self)
 The deathmatch intermission point will be at one of these
 Use 'angles' instead of 'angle', so you can set pitch or roll as well as yaw.  'pitch yaw roll'
 */
-void SP_info_player_intermission(void)
+void SP_info_player_intermission(edict_t* ent)
 {
 }
 
@@ -192,13 +192,14 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
                 } else {
                         gi.bprintf (PRINT_MEDIUM,"%s killed self.\n", self->client->pers.netname);
                 }
-				if (self->enemy && self->enemy->inuse && self->enemy->client && self->enemy->takedamage == DAMAGE_AIM)
+				if (self->enemy && self->enemy->inuse && self->enemy->client && self->enemy->takedamage == DAMAGE_AIM) {
 					if (self->enemy->health >= arenas[attacker->client->resp.context].settings.health)
-						send_sound_to_arena("ra/outstand.wav",attacker->client->resp.context);
+						send_sound_to_arena("ra/outstand.wav", attacker->client->resp.context);
 					else if (self->enemy->health >= arenas[attacker->client->resp.context].settings.health - 20)
-						send_sound_to_arena("ra/welldone.wav",attacker->client->resp.context);
-					else if(self->health < -40)  //giiiiiib!
-						send_sound_to_arena("ra/animality.wav",attacker->client->resp.context);
+						send_sound_to_arena("ra/welldone.wav", attacker->client->resp.context);
+					else if (self->health < -40)  //giiiiiib!
+						send_sound_to_arena("ra/animality.wav", attacker->client->resp.context);
+				}
 		self->client->resp.score--;
 		self->enemy = NULL;
 		return;
@@ -377,7 +378,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 		LookAtKiller (self, inflictor, attacker);
 		self->client->ps.pmove.pm_type = PM_DEAD;
 		ClientObituary (self, inflictor, attacker);
-		GSLogDeath(self,inflictor,attacker);//gslog arena
+		//GSLogDeath(self,inflictor,attacker);//gslog arena
 
 //arena                TossClientWeapon (self);
 //                remove_player(self); //keep on team till disconnect or leaveteam
@@ -774,8 +775,10 @@ void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
 			{	// there wasn't a spawnpoint without a target, so use any
 				spot = G_Find (spot, FOFS(classname), "info_player_start");
 			}
-			if (!spot)
-				gi.error ("Couldn't find spawn point %s\n", game.spawnpoint);
+			if (!spot) {
+				gi.error("Couldn't find spawn point %s\n", game.spawnpoint);
+				exit(1); //QW// never happens
+			}
 		}
 	}
 
@@ -1325,7 +1328,9 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 	}
 	
 	ClientUserinfoChanged (ent, userinfo);
+#if defined GS_LOG
 	GSLogEnter(ent);//gslog
+#endif
 
 	if (game.maxclients > 1)
 		gi.dprintf ("%s connected\n", ent->client->pers.netname);
@@ -1348,7 +1353,7 @@ void ClientDisconnect (edict_t *ent)
 
 	if (!ent->client)
 		return;
-	GSLogExit(ent); //gslog arena
+	//GSLogExit(ent); //gslog arena
 
 	gi.bprintf (PRINT_HIGH, "%s disconnected\n", ent->client->pers.netname);
 

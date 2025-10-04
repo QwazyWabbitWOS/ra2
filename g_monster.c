@@ -85,13 +85,13 @@ void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 // Monster utility functions
 //
 
-static void M_FliesOff (edict_t *self)
+void M_FliesOff (edict_t *self)
 {
 	self->s.effects &= ~EF_FLIES;
 	self->s.sound = 0;
 }
 
-static void M_FliesOn (edict_t *self)
+void M_FliesOn (edict_t *self)
 {
 	if (self->waterlevel)
 		return;
@@ -386,12 +386,12 @@ void M_MoveFrame (edict_t *self)
 	}
 
 	index = self->s.frame - move->firstframe;
-	if (move->frame[index].aifunc)
+	if (move->frame[index].aifunc) {
 		if (!(self->monsterinfo.aiflags & AI_HOLD_FRAME))
-			move->frame[index].aifunc (self, move->frame[index].dist * self->monsterinfo.scale);
+			move->frame[index].aifunc(self, move->frame[index].dist * self->monsterinfo.scale);
 		else
-			move->frame[index].aifunc (self, 0);
-
+			move->frame[index].aifunc(self, 0);
+	}
 	if (move->frame[index].thinkfunc)
 		move->frame[index].thinkfunc (self);
 }

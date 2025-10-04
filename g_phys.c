@@ -73,21 +73,31 @@ SV_RunThink
 Runs thinking code for this frame if necessary
 =============
 */
-qboolean SV_RunThink (edict_t *ent)
+qboolean SV_RunThink(edict_t* ent)
 {
 	float	thinktime;
 
 	thinktime = ent->nextthink;
+
 	if (thinktime <= 0)
 		return true;
-	if (thinktime > level.time+0.001)
+	if (thinktime > level.time + 0.001)
 		return true;
-	
-	ent->nextthink = 0;
-	if (!ent->think)
-		gi.error ("NULL ent->think");
-	ent->think (ent);
 
+	ent->nextthink = 0;
+
+	if (!ent->think || !ent->inuse)
+	{
+		if (ent->classname && ent->model)
+			gi.dprintf("NULL ent->think (classname %s, model %s mapname %s)\n", ent->classname, ent->model, level.mapname);
+		else if (ent->classname)
+			gi.dprintf("NULL ent->think (classname %s mapname %s)\n", ent->classname, level.mapname);
+		else
+			gi.dprintf("NULL ent->think (mapname %s)\n", level.mapname);
+		return false;
+	}
+
+	ent->think(ent);
 	return false;
 }
 
@@ -387,6 +397,9 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 	vec3_t		mins, maxs;
 	pushed_t	*p;
 	vec3_t		org, org2, move2, forward, right, up;
+
+	if (!pusher)
+		return false;
 
 	// clamp the move to 1/8 units, so the position will
 	// be accurate for client side prediction

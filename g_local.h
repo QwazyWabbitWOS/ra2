@@ -18,6 +18,7 @@
 #define	svc_temp_entity		3
 #define	svc_layout			4
 #define	svc_inventory		5
+#define svc_stufftext       11
 
 //==================================================================
 
@@ -424,9 +425,11 @@ extern	spawn_temp_t	st;
 extern	int	sm_meat_index;
 extern	int	snd_fry;
 
-extern	int	jacket_armor_index;
-extern	int	combat_armor_index;
-extern	int	body_armor_index;
+extern int	jacket_armor_index;
+extern int	combat_armor_index;
+extern int	body_armor_index;
+extern int	power_screen_index;
+extern int	power_shield_index;
 
 
 // means of death
@@ -468,13 +471,14 @@ extern	int	body_armor_index;
 
 extern	int	meansOfDeath;
 
+#define q_offsetof(t, m)    ((size_t)&((t *)0)->m)
 
-extern	edict_t			*g_edicts;
+extern	edict_t* g_edicts;
 
-#define	FOFS(x) (int)&(((edict_t *)0)->x)
-#define	STOFS(x) (int)&(((spawn_temp_t *)0)->x)
-#define	LLOFS(x) (int)&(((level_locals_t *)0)->x)
-#define	CLOFS(x) (int)&(((gclient_t *)0)->x)
+#define FOFS(x)     q_offsetof(edict_t, x)
+#define STOFS(x)    q_offsetof(spawn_temp_t, x)
+#define	LLOFS(x)    q_offsetof(level_locals_t, x)
+#define	CLOFS(x)    q_offsetof(gclient_t, x)
 
 #define random()	((rand () & 0x7fff) / ((float)0x7fff))
 #define crandom()	(2.0 * (random() - 0.5))
@@ -648,8 +652,10 @@ void AttackFinished (edict_t *self, float time);
 void monster_death_use (edict_t *self);
 void M_CatagorizePosition (edict_t *ent);
 qboolean M_CheckAttack (edict_t *self);
-void M_FlyCheck (edict_t *self);
-void M_CheckGround (edict_t *ent);
+void M_FliesOff(edict_t* self);
+void M_FliesOn(edict_t* self);
+void M_FlyCheck(edict_t* self);
+void M_CheckGround(edict_t* ent);
 
 //
 // g_misc.c
@@ -764,7 +770,7 @@ void FetchClientEntData (edict_t *ent);
 //arena
 #define ARENA
 #include "arena.h"
-#include "gslog.h"
+//#include "gslog.h"
 //menu arena
 #include "menu.h"
 

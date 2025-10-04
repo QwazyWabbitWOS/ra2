@@ -1,6 +1,10 @@
 
 #define MAXITEMSIZE 100
 
+//QW// moved this from where it was in menu.c
+// undefining it breaks the menu system.
+#define FANCY_MENUS
+
 #ifndef ARENA
 typedef struct arena_link_s {
         void *it;
@@ -30,12 +34,14 @@ char *LoPrint(char *text);
 char *HiPrint(char *text);
 
 void DisplayMenu(edict_t *ent);
+void DisplaySimpMenu(edict_t* ent);
 void UseMenu(edict_t *ent, int key);
 qboolean MenuThink(edict_t *ent);
 void MenuNext(edict_t *ent);
 void MenuPrev(edict_t *ent);
 arena_link_t *CreateQMenu(edict_t *ent, char *name);
-arena_link_t *AddMenuItem(arena_link_t *menulink, char *itemtext, char *valuetext, int value, void *Callback);
+arena_link_t* AddMenuItem(arena_link_t* menulink, char* itemtext, char* valuetext, int value,
+	int (*Callback)(edict_t* ent, arena_link_t* menulink, arena_link_t* selected, int key));
 void FinishMenu(edict_t *ent, arena_link_t *menulink,int showit);
 void PrintMenuQueue(edict_t *ent);
 void SendStatusBar(edict_t *ent, char *bar,qboolean force);

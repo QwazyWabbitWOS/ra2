@@ -1,6 +1,8 @@
-#include <sys/stat.h>
+
 #include "g_local.h"
-//include <ctype.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 static cvar_t *gamedir;
 
 // config file --
@@ -22,7 +24,7 @@ static char *line;
 int weapon_vals[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256 };
 
 #define S_GET_VAL(tval, name, defs, num)			\
-	if(it = find_key(name, DEF_VAL, defs, num)) {	\
+	if((it = find_key(name, DEF_VAL, defs, num))) {	\
 		(tval) = atoi(get_val(it->val.vals, 0));	\
 	}
 /*
@@ -124,7 +126,7 @@ void get_settings(definition_item_t *defs, int num_defs)
 	int v;
 	int w, w2;
 
-	if(it = find_key("weapons", DEF_VAL, defs, num_defs)) {
+	if((it = find_key("weapons", DEF_VAL, defs, num_defs))) {
 		v = 0;
 		for(w=0; w<= 8; w++) {
 			if(w == 8)
@@ -344,7 +346,7 @@ char *new_val_block (void)
 {
 	char *val = (char *)gi.TagMalloc(1024, TAG_LEVEL);
 
-	sprintf(val, "");
+	sprintf(val, " ");
 	return(val);
 }
 
@@ -374,7 +376,7 @@ def_stack_t stack[32];
 
 int read_block(FILE *cfgfile, definition_item_t *items)
 {
-	int level = 0;
+	int lev = 0;
 	definition_item_t *curdef;
 	char *tok;
 	enum {
@@ -389,7 +391,7 @@ int read_block(FILE *cfgfile, definition_item_t *items)
 	while(1) {
 		r = fscanf(cfgfile, "%s", line);
 		if(r < 1) {
-			if(level) {
+			if(lev) {
 				gi.dprintf("Error reading config file: unbalanced {}\n");
 				return(0);
 			}
@@ -419,14 +421,14 @@ int read_block(FILE *cfgfile, definition_item_t *items)
 					curdef->val.defs = new_def_block();
 
 					// stack
-					stack[level].numitems = numitems;
-					stack[level].items = items;
-					stack[level].curdef = curdef;
+					stack[lev].numitems = numitems;
+					stack[lev].items = items;
+					stack[lev].curdef = curdef;
 
 					numitems = 0;
 					items = curdef->val.defs;
 					curdef = new_def_item(items++);
-					level++;
+					lev++;
 				} else
 				if(*tok == ':') {	// value identifier
 //					curdef->keys = (char *)realloc(curdef->keys, strlen(curdef->keys) + 1);
@@ -437,18 +439,18 @@ int read_block(FILE *cfgfile, definition_item_t *items)
 				if(*tok == '}') {	// end of block identifier
 //					gi.dprintf("%d\n", level);
 
-					if(!level) {
+					if(!lev) {
 						gi.dprintf("Error reading config file: unbalanced {}\n");
 						return(0);
 					}
 
 					// stack
-					level--;
-					curdef = stack[level].curdef;
+					lev--;
+					curdef = stack[lev].curdef;
 					curdef->numvals = numitems;
 //					curdef->val.defs = (definition_item_t *)realloc(curdef->val.defs, sizeof(*curdef->val.defs) * numitems);
-					items = stack[level].items;
-					numitems = stack[level].numitems;
+					items = stack[lev].items;
+					numitems = stack[lev].numitems;
 					curdef = new_def_item(items++);
 					mode = MODE_KEY;
 					numitems++;
@@ -515,13 +517,11 @@ definition_item_t *find_key(char *key, definition_type_t type, definition_item_t
 void list_keys(edict_t *ent)
 {
 	definition_item_t *block;
-	char result[1024];
+	char result[1024] = { 0 };
 	int i;
 	int num = num_definition_blocks;
 	definition_item_t *blocks = definition_blocks;
 	int argc = gi.argc();
-
-	sprintf(result, "");
 
 	for(i=1; i < argc; i++) {
 		if(!(block = find_key(gi.argv(i), DEF_BLOCK, blocks, num))) {
@@ -554,13 +554,8 @@ void load_config(int num_arenas)
 
         gamedir = gi.cvar("game", ".", CVAR_LATCH);
         strcpy(mpath, gamedir->string);
-// NOTE: Change this if compiling for non-DOS!
-#ifdef LINUX
-        strcat(mpath, "/arena.cfg");
-#else
-		strcat(mpath, "\\arena.cfg");
-#endif
-      
+
+		strcat(mpath, "/arena.cfg");
 
         if(!(fp = fopen(mpath, "r"))) {
                 gi.dprintf("Error: Couldn't read %s\n", mpath);
@@ -573,7 +568,7 @@ void load_config(int num_arenas)
 	
 	// set per-map and arenas blocks
 	arena_blocks = (definition_item_t **) gi.TagMalloc(sizeof(definition_item_t *) * num_arenas, TAG_LEVEL);
-	if(map = find_key(level.mapname, DEF_BLOCK, definition_blocks, num_definition_blocks)) {
+	if((map = find_key(level.mapname, DEF_BLOCK, definition_blocks, num_definition_blocks))) {
 		gi.dprintf("arena.cfg info for map found: %s\n",level.mapname);
 		map_block = map;
 		for(i=0; i<num_arenas; i++) {
@@ -586,16 +581,16 @@ void load_config(int num_arenas)
 		map_block = NULL;
 	}
 
-	if(it = find_key("votetries", DEF_VAL, definition_blocks, num_definition_blocks)) {
+	if((it = find_key("votetries", DEF_VAL, definition_blocks, num_definition_blocks))) {
 		votetries_setting = atoi(get_val(it->val.vals, 0));
 	}
 
-	if(it = find_key("grapple", DEF_VAL, definition_blocks, num_definition_blocks)) {
+	if((it = find_key("grapple", DEF_VAL, definition_blocks, num_definition_blocks))) {
 		allow_grapple = atoi(get_val(it->val.vals, 0));
 	}
 
 // get map loop
-	if(map_loop = find_key("maploop", DEF_VAL, definition_blocks, num_definition_blocks)) {
+	if((map_loop = find_key("maploop", DEF_VAL, definition_blocks, num_definition_blocks))) {
 		gi.dprintf("Map loop read\n");
 	}
 }
@@ -614,7 +609,6 @@ char *get_next_map(char *curmap)
 		return(get_val(map_loop->val.vals, 0));
 	}
 
-	//for(i=0	; i<map_loop->numvals; i++) //
 	i=0;
 	while (i < map_loop->numvals) 
 	{
@@ -628,6 +622,7 @@ char *get_next_map(char *curmap)
 		}
 		i++;
 	}
+	return curmap;
 }
 
 /*******
@@ -642,57 +637,49 @@ void print_map_loop(edict_t *ent)
 	}
 }
 
-/*******
-load_motd
-*******/
 extern arena_link_t motd;
+
+/*******
+load_motd - Loads the Message of the Day from motd.txt file
+*******/
 void load_motd(void)
 {
-        FILE *fp;
-        struct stat st;
-        char *mappt;
-		char *maps;
-        char mpath[80];
-		arena_link_t *alink;
+	FILE* fp;
+	char* mappt;
+	char* maps;
+	char mpath[MAX_QPATH];
+	arena_link_t* alink;
 
-		motd.next = motd.prev = NULL;
-        gamedir = gi.cvar("game", ".", CVAR_LATCH);
-        strcpy(mpath, gamedir->string);
-// NOTE: Change this if compiling for non-DOS!
+	motd.next = motd.prev = NULL;
 
-#ifdef LINUX
-        strcat(mpath, "/motd.txt");
-#else
-        strcat(mpath, "\\motd.txt");
-#endif
+	// Get game directory path
+	gamedir = gi.cvar("game", ".", 0);
 
+	// Construct path to motd.txt
+	Com_sprintf(mpath, sizeof(mpath), "%s/motd.txt", gamedir->string);
 
-        if(!(fp = fopen(mpath, "r"))) {
-                gi.dprintf("Error: Couldn't read %s\n", mpath);
-				return;
-        } else
-			gi.dprintf("Sucessfully read %s\n", mpath);
-#ifdef LINUX
-		maps = gi.TagMalloc(2048, TAG_LEVEL);
-#else
-        fstat(fileno(fp), &st);
-        if(!(maps = gi.TagMalloc(st.st_size + 2, TAG_LEVEL))) {
-                gi.dprintf("Error: Couldn't malloc %d\n", st.st_size);
-                return; //need to add two, for the trailing null char (and a safety)
-        }
-#endif
+	if (!(fp = fopen(mpath, "r"))) {
+		gi.dprintf("Error: Couldn't read %s\n", mpath);
+		return;
+	}
+	else
+		gi.dprintf("Successfully read %s\n", mpath);
 
-        mappt = maps;
-        while((mappt = fgets(mappt,99999, fp)) > (char *)0)
-		{
-			if (mappt[strlen(mappt)-1] == '\n')
-				mappt[strlen(mappt)-1] = '\000'; //get rid of newline
-			alink = gi.TagMalloc(sizeof(arena_link_t), TAG_LEVEL);
-			alink->it = mappt;
-			add_to_queue(alink, &motd);
-            mappt += strlen(mappt) + 1;
-        }
+	if (!(maps = gi.TagMalloc(2048, TAG_LEVEL))) {
+		gi.dprintf("Error: Couldn't malloc for MOTD\n");
+		return;
+	}
 
-        fclose(fp);
+	mappt = maps;
+	while ((mappt = fgets(mappt, 99999, fp)) > (char*)0)
+	{
+		if (mappt[strlen(mappt) - 1] == '\n')
+			mappt[strlen(mappt) - 1] = '\0'; //get rid of newline
+		alink = gi.TagMalloc(sizeof(arena_link_t), TAG_LEVEL);
+		alink->it = mappt;
+		add_to_queue(alink, &motd);
+		mappt += strlen(mappt) + 1;
+	}
+
+	fclose(fp);
 }
-

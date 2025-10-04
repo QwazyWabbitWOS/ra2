@@ -133,7 +133,7 @@ void InitGame (void)
 	int i;
 	cvar_t *ispublic;
 
-	gi.dprintf ("==== InitGame %s====\n", GAMEVERSION);
+	gi.dprintf ("==== InitGame %s ====\n", GAMEVERSION);
 
 	gun_x = gi.cvar ("gun_x", "0", 0);
 	gun_y = gi.cvar ("gun_y", "0", 0);
@@ -183,7 +183,7 @@ void InitGame (void)
 	bob_pitch = gi.cvar ("bob_pitch", "0.002", 0);
 	bob_roll = gi.cvar ("bob_roll", "0.002", 0);
 
-	GSLogStartup(); //gslog arena
+	//GSLogStartup(); //gslog arena
 
 	// items
 	InitItems ();
@@ -211,11 +211,6 @@ void InitGame (void)
 		game.clients[i].resp.initialized = 0;
 	}
 	globals.num_edicts = game.maxclients+1;
-#ifndef LINUX
-	if (!wsock32state(1))
-		gi.cvar_set("netlog",""); //arena;
-
-#endif
 }
 
 //=========================================================
@@ -239,7 +234,7 @@ void WriteField1 (FILE *f, field_t *field, byte *base)
 	case F_LSTRING:
 	case F_GSTRING:
 		if ( *(char **)p )
-			len = strlen(*(char **)p) + 1;
+			len = (int)strlen(*(char **)p) + 1;
 		else
 			len = 0;
 		*(int *)p = len;
@@ -283,9 +278,11 @@ void WriteField2 (FILE *f, field_t *field, byte *base)
 	case F_GSTRING:
 		if ( *(char **)p )
 		{
-			len = strlen(*(char **)p) + 1;
+			len = (int)strlen(*(char **)p) + 1;
 			fwrite (*(char **)p, len, 1, f);
 		}
+		break;
+	default:
 		break;
 	}
 }
@@ -313,7 +310,10 @@ void ReadField (FILE *f, field_t *field, byte *base)
 		else
 		{
 			*(char **)p = gi.TagMalloc (len, TAG_LEVEL);
-			fread (*(char **)p, len, 1, f);
+			size_t count = fread(*(char**)p, len, 1, f);
+			if (count) {
+				; // don't worry, be happy
+			}
 		}
 		break;
 	case F_GSTRING:
@@ -323,7 +323,10 @@ void ReadField (FILE *f, field_t *field, byte *base)
 		else
 		{
 			*(char **)p = gi.TagMalloc (len, TAG_GAME);
-			fread (*(char **)p, len, 1, f);
+			size_t count = fread(*(char**)p, len, 1, f);
+			if (count) {
+				; // don't worry, be happy
+			}
 		}
 		break;
 	case F_EDICT:
@@ -397,7 +400,10 @@ void ReadClient (FILE *f, gclient_t *client)
 {
 	field_t		*field;
 
-	fread (client, sizeof(*client), 1, f);
+	size_t count = fread(client, sizeof(*client), 1, f);
+	if (count) {
+		; // don't worry, be happy
+	}
 
 	for (field=clientfields ; field->name ; field++)
 	{
@@ -429,8 +435,10 @@ void WriteGame (char *filename, qboolean autosave)
 		SaveClientData ();
 
 	f = fopen (filename, "wb");
-	if (!f)
-		gi.error ("Couldn't open %s", filename);
+	if (!f) {
+		gi.error("Couldn't open %s", filename);
+		exit(1);
+	}
 
 	memset (str, 0, sizeof(str));
 	strcpy (str, __DATE__);
@@ -450,15 +458,21 @@ void ReadGame (char *filename)
 {
 	FILE	*f;
 	int		i;
-	char	str[16];
+	char	str[16] = { 0 };
 
 	gi.FreeTags (TAG_GAME);
 
 	f = fopen (filename, "rb");
-	if (!f)
-		gi.error ("Couldn't open %s", filename);
+	if (!f) {
+		gi.error("Couldn't open %s", filename);
+		exit(1);
+	}
 
-	fread (str, sizeof(str), 1, f);
+	size_t count = fread(str, sizeof(str), 1, f);
+	if (count) {
+		; // don't worry, be happy
+	}
+
 	if (strcmp (str, __DATE__))
 	{
 		fclose (f);
@@ -468,7 +482,7 @@ void ReadGame (char *filename)
 	g_edicts =  gi.TagMalloc (game.maxentities * sizeof(g_edicts[0]), TAG_GAME);
 	globals.edicts = g_edicts;
 
-	fread (&game, sizeof(game), 1, f);
+	count = fread(&game, sizeof(game), 1, f);
 	game.clients = gi.TagMalloc (game.maxclients * sizeof(game.clients[0]), TAG_GAME);
 	for (i=0 ; i<game.maxclients ; i++)
 		ReadClient (f, &game.clients[i]);
@@ -554,7 +568,10 @@ void ReadEdict (FILE *f, edict_t *ent)
 {
 	field_t		*field;
 
-	fread (ent, sizeof(*ent), 1, f);
+	size_t count = fread(ent, sizeof(*ent), 1, f);
+	if (count) {
+		; // don't worry, be happy
+	}
 
 	for (field=savefields ; field->name ; field++)
 	{
@@ -573,7 +590,10 @@ void ReadLevelLocals (FILE *f)
 {
 	field_t		*field;
 
-	fread (&level, sizeof(level), 1, f);
+	size_t count = fread(&level, sizeof(level), 1, f);
+	if (count) {
+		; // don't worry, be happy
+	}
 
 	for (field=levelfields ; field->name ; field++)
 	{
@@ -595,8 +615,10 @@ void WriteLevel (char *filename)
 	void	*base;
 
 	f = fopen (filename, "wb");
-	if (!f)
-		gi.error ("Couldn't open %s", filename);
+	if (!f) {
+		gi.error("Couldn't open %s", filename);
+		exit(1);
+	}
 
 	// write out edict size for checking
 	i = sizeof(edict_t);
@@ -648,6 +670,7 @@ void ReadLevel (char *filename)
 	int		i;
 	void	*base;
 	edict_t	*ent;
+	size_t count;
 
 	f = fopen (filename, "rb");
 	if (!f)
@@ -662,7 +685,7 @@ void ReadLevel (char *filename)
 	globals.num_edicts = maxclients->value+1;
 
 	// check edict size
-	fread (&i, sizeof(i), 1, f);
+	count = fread (&i, sizeof(i), 1, f);
 	if (i != sizeof(edict_t))
 	{
 		fclose (f);
@@ -670,7 +693,7 @@ void ReadLevel (char *filename)
 	}
 
 	// check function pointer base address
-	fread (&base, sizeof(base), 1, f);
+	count = fread (&base, sizeof(base), 1, f);
 	if (base != (void *)InitGame)
 	{
 		fclose (f);
@@ -683,7 +706,8 @@ void ReadLevel (char *filename)
 	// load all the entities
 	while (1)
 	{
-		if (fread (&entnum, sizeof(entnum), 1, f) != 1)
+		count = fread(&entnum, sizeof(entnum), 1, f);
+		if (count != 1)
 		{
 			fclose (f);
 			gi.error ("ReadLevel: failed to read entnum");

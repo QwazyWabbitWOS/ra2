@@ -9,8 +9,6 @@ Makron -- Final Boss
 #include "g_local.h"
 #include "m_boss32.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
 void MakronRailgun (edict_t *self);
 void MakronSaveloc (edict_t *self);
 void MakronHyperblaster (edict_t *self);
@@ -53,66 +51,66 @@ void makron_taunt (edict_t *self)
 
 mframe_t makron_frames_stand []=
 {
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,		// 10
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,		// 20
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,		// 30
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,		// 40
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,		// 50
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL		// 60
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},		// 10
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},		// 20
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},		// 30
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},		// 40
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},		// 50
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL}		// 60
 };
 mmove_t	makron_move_stand = {FRAME_stand201, FRAME_stand260, makron_frames_stand, NULL};
 	
@@ -123,16 +121,16 @@ void makron_stand (edict_t *self)
 
 mframe_t makron_frames_run [] =
 {
-	ai_run, 3,	makron_step_left,
-	ai_run, 12,	NULL,
-	ai_run, 8,	NULL,
-	ai_run, 8,	NULL,
-	ai_run, 8,	makron_step_right,
-	ai_run, 6,	NULL,
-	ai_run, 12,	NULL,
-	ai_run, 9,	NULL,
-	ai_run, 6,	NULL,
-	ai_run, 12,	NULL
+	{ai_run, 3,	makron_step_left},
+	{ai_run, 12,	NULL},
+	{ai_run, 8,	NULL},
+	{ai_run, 8,	NULL},
+	{ai_run, 8,	makron_step_right},
+	{ai_run, 6,	NULL},
+	{ai_run, 12,	NULL},
+	{ai_run, 9,	NULL},
+	{ai_run, 6,	NULL},
+	{ai_run, 12,	NULL}
 };
 mmove_t	makron_move_run = {FRAME_walk204, FRAME_walk213, makron_frames_run, NULL};
 
@@ -169,16 +167,16 @@ void makron_prerailgun (edict_t *self)
 
 mframe_t makron_frames_walk [] =
 {
-	ai_walk, 3,	makron_step_left,
-	ai_walk, 12,	NULL,
-	ai_walk, 8,	NULL,
-	ai_walk, 8,	NULL,
-	ai_walk, 8,	makron_step_right,
-	ai_walk, 6,	NULL,
-	ai_walk, 12,	NULL,
-	ai_walk, 9,	NULL,
-	ai_walk, 6,	NULL,
-	ai_walk, 12,	NULL
+	{ai_walk, 3,	makron_step_left},
+	{ai_walk, 12,	NULL},
+	{ai_walk, 8,	NULL},
+	{ai_walk, 8,	NULL},
+	{ai_walk, 8,	makron_step_right},
+	{ai_walk, 6,	NULL},
+	{ai_walk, 12,	NULL},
+	{ai_walk, 9,	NULL},
+	{ai_walk, 6,	NULL},
+	{ai_walk, 12,	NULL}
 };
 mmove_t	makron_move_walk = {FRAME_walk204, FRAME_walk213, makron_frames_run, NULL};
 
@@ -197,194 +195,194 @@ void makron_run (edict_t *self)
 
 mframe_t makron_frames_pain6 [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,		// 10
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	makron_popup,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,		// 20
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	makron_taunt,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},		// 10
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	makron_popup},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},		// 20
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	makron_taunt},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_pain6 = {FRAME_pain601, FRAME_pain627, makron_frames_pain6, makron_run};
 
 mframe_t makron_frames_pain5 [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_pain5 = {FRAME_pain501, FRAME_pain504, makron_frames_pain5, makron_run};
 
 mframe_t makron_frames_pain4 [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_pain4 = {FRAME_pain401, FRAME_pain404, makron_frames_pain4, makron_run};
 
 mframe_t makron_frames_death2 [] =
 {
-	ai_move,	-15,	NULL,
-	ai_move,	3,	NULL,
-	ai_move,	-12,	NULL,
-	ai_move,	0,	makron_step_left,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			// 10
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	11,	NULL,
-	ai_move,	12,	NULL,
-	ai_move,	11,	makron_step_right,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			// 20
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			// 30
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	5,	NULL,
-	ai_move,	7,	NULL,
-	ai_move,	6,	makron_step_left,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	-1,	NULL,
-	ai_move,	2,	NULL,			// 40
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,			// 50
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	-6,	NULL,
-	ai_move,	-4,	NULL,
-	ai_move,	-6,	makron_step_right,
-	ai_move,	-4,	NULL,
-	ai_move,	-4,	makron_step_left,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			// 60
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,
-	ai_move,	-2,	NULL,
-	ai_move,	-5,	NULL,
-	ai_move,	-3,	makron_step_right,
-	ai_move,	-8,	NULL,
-	ai_move,	-3,	makron_step_left,
-	ai_move,	-7,	NULL,
-	ai_move,	-4,	NULL,
-	ai_move,	-4,	makron_step_right,			// 70
-	ai_move,	-6,	NULL,			
-	ai_move,	-7,	NULL,
-	ai_move,	0,	makron_step_left,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,			// 80
-	ai_move,	0,	NULL,			
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	-2,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	2,	NULL,
-	ai_move,	0,	NULL,			// 90
-	ai_move,	27,	makron_hit,			
-	ai_move,	26,	NULL,
-	ai_move,	0,	makron_brainsplorch,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL			// 95
+	{ai_move,	-15,	NULL},
+	{ai_move,	3,	NULL},
+	{ai_move,	-12,	NULL},
+	{ai_move,	0,	makron_step_left},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 10
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	11,	NULL},
+	{ai_move,	12,	NULL},
+	{ai_move,	11,	makron_step_right},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 20
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 30
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	5,	NULL},
+	{ai_move,	7,	NULL},
+	{ai_move,	6,	makron_step_left},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	-1,	NULL},
+	{ai_move,	2,	NULL},			// 40
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 50
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	-6,	NULL},
+	{ai_move,	-4,	NULL},
+	{ai_move,	-6,	makron_step_right},
+	{ai_move,	-4,	NULL},
+	{ai_move,	-4,	makron_step_left},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 60
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	-2,	NULL},
+	{ai_move,	-5,	NULL},
+	{ai_move,	-3,	makron_step_right},
+	{ai_move,	-8,	NULL},
+	{ai_move,	-3,	makron_step_left},
+	{ai_move,	-7,	NULL},
+	{ai_move,	-4,	NULL},
+	{ai_move,	-4,	makron_step_right},			// 70
+	{ai_move,	-6,	NULL},
+	{ai_move,	-7,	NULL},
+	{ai_move,	0,	makron_step_left},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},			// 80
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	-2,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	2,	NULL},
+	{ai_move,	0,	NULL},			// 90
+	{ai_move,	27,	makron_hit},
+	{ai_move,	26,	NULL},
+	{ai_move,	0,	makron_brainsplorch},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}			// 95
 };
 mmove_t makron_move_death2 = {FRAME_death201, FRAME_death295, makron_frames_death2, makron_dead};
 
 mframe_t makron_frames_death3 [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_death3 = {FRAME_death301, FRAME_death320, makron_frames_death3, NULL};
 
 mframe_t makron_frames_sight [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_sight= {FRAME_active01, FRAME_active13, makron_frames_sight, makron_run};
 
@@ -392,8 +390,8 @@ void makronBFG (edict_t *self)
 {
 	vec3_t	forward, right;
 	vec3_t	start;
-	vec3_t	dir;
-	vec3_t	vec;
+	vec3_t	dir = { 0 };
+	vec3_t	vec = { 0 };
 
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_MAKRON_BFG], forward, right, start);
@@ -409,66 +407,66 @@ void makronBFG (edict_t *self)
 
 mframe_t makron_frames_attack3 []=
 {
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	makronBFG,		// FIXME: BFG Attack here
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	makronBFG},		// FIXME: BFG Attack here
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_attack3 = {FRAME_attak301, FRAME_attak308, makron_frames_attack3, makron_run};
 
 mframe_t makron_frames_attack4[]=
 {
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	MakronHyperblaster,		// fire
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	MakronHyperblaster},		// fire
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_attack4 = {FRAME_attak401, FRAME_attak426, makron_frames_attack4, makron_run};
 
 mframe_t makron_frames_attack5[]=
 {
-	ai_charge,	0,	makron_prerailgun,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	NULL,
-	ai_charge,	0,	MakronSaveloc,
-	ai_move,	0,	MakronRailgun,		// Fire railgun
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_charge,	0,	makron_prerailgun},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	NULL},
+	{ai_charge,	0,	MakronSaveloc},
+	{ai_move,	0,	MakronRailgun},		// Fire railgun
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t makron_move_attack5 = {FRAME_attak501, FRAME_attak516, makron_frames_attack5, makron_run};
 
@@ -476,13 +474,13 @@ void MakronSaveloc (edict_t *self)
 {
 	VectorCopy (self->enemy->s.origin, self->pos1);	//save for aiming the shot
 	self->pos1[2] += self->enemy->viewheight;
-};
+}
 
 // FIXME: He's not firing from the proper Z
 void MakronRailgun (edict_t *self)
 {
 	vec3_t	start;
-	vec3_t	dir;
+	vec3_t	dir = { 0 };
 	vec3_t	forward, right;
 
 	AngleVectors (self->s.angles, forward, right, NULL);
@@ -498,8 +496,8 @@ void MakronRailgun (edict_t *self)
 // FIXME: This is all wrong. He's not firing at the proper angles.
 void MakronHyperblaster (edict_t *self)
 {
-	vec3_t	dir;
-	vec3_t	vec;
+	vec3_t	dir = { 0 };
+	vec3_t	vec = { 0 };
 	vec3_t	start;
 	vec3_t	forward, right;
 	int		flash_number;
@@ -565,6 +563,7 @@ void makron_pain (edict_t *self, edict_t *other, float kick, int damage)
 	else
 	{
 		if (damage <= 150)
+		{
 			if (random() <= 0.45)
 			{
 				gi.sound (self, CHAN_VOICE, sound_pain6, 1, ATTN_NONE,0);
@@ -577,24 +576,17 @@ void makron_pain (edict_t *self, edict_t *other, float kick, int damage)
 				self->monsterinfo.currentmove = &makron_move_pain6;
 			}
 	}
-};
+	}
+}
 
 void makron_sight(edict_t *self, edict_t *other)
 {
 	self->monsterinfo.currentmove = &makron_move_sight;
-};
+}
 
 void makron_attack(edict_t *self)
 {
-	vec3_t	vec;
-	float	range;
-	float	r;
-
-	r = random();
-
-	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
-	range = VectorLength (vec);
-
+	float r = random();
 
 	if (r <= 0.3)
 		self->monsterinfo.currentmove = &makron_move_attack3;
@@ -691,11 +683,11 @@ void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 
 qboolean Makron_CheckAttack (edict_t *self)
 {
-	vec3_t	spot1, spot2;
-	vec3_t	temp;
+	vec3_t	spot1 = { 0 }, spot2 = { 0 };
+	vec3_t	temp = { 0 };
 	float	chance;
 	trace_t	tr;
-	qboolean	enemy_infront;
+	//qboolean	enemy_infront;
 	int			enemy_range;
 	float		enemy_yaw;
 
@@ -714,7 +706,7 @@ qboolean Makron_CheckAttack (edict_t *self)
 			return false;
 	}
 	
-	enemy_infront = infront(self, self->enemy);
+	//enemy_infront = infront(self, self->enemy);
 	enemy_range = range(self, self->enemy);
 	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
@@ -744,19 +736,19 @@ qboolean Makron_CheckAttack (edict_t *self)
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 	{
-		chance = 0.4;
+		chance = 0.4f;
 	}
 	else if (enemy_range == RANGE_MELEE)
 	{
-		chance = 0.8;
+		chance = 0.8f;
 	}
 	else if (enemy_range == RANGE_NEAR)
 	{
-		chance = 0.4;
+		chance = 0.4f;
 	}
 	else if (enemy_range == RANGE_MID)
 	{
-		chance = 0.2;
+		chance = 0.2f;
 	}
 	else
 	{
@@ -857,7 +849,7 @@ MakronSpawn
 */
 void MakronSpawn (edict_t *self)
 {
-	vec3_t		vec;
+	vec3_t		vec = { 0 };
 	edict_t		*player;
 
 	SP_monster_makron (self);
@@ -887,7 +879,7 @@ void MakronToss (edict_t *self)
 	edict_t	*ent;
 
 	ent = G_Spawn ();
-	ent->nextthink = level.time + 0.8;
+	ent->nextthink = level.time + 0.8f;
 	ent->think = MakronSpawn;
 	ent->target = self->target;
 	VectorCopy (self->s.origin, ent->s.origin);

@@ -408,13 +408,15 @@ A generic function to handle the basics of weapon thinking
 void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, int FRAME_IDLE_LAST, int FRAME_DEACTIVATE_LAST, int *pause_frames, int *fire_frames, void (*fire)(edict_t *ent))
 {
 	int		n;
-
+	if (!ent->client)
+		return;
 //arena
-        if(ent->client && ent->client->resp.flag != ARENA_PLAYER)
+        if(ent->client->resp.flag != ARENA_PLAYER)
             return;
 		if (ent->s.modelindex != 255)
 			return;//vwep
-	if (ent->client->weaponstate == WEAPON_DROPPING)
+
+		if (ent->client->weaponstate == WEAPON_DROPPING)
 	{
 		if (ent->client->ps.gunframe == FRAME_DEACTIVATE_LAST)
 		{
@@ -1009,10 +1011,12 @@ void Machinegun_Fire (edict_t *ent)
 	int			kick = 2;
 	vec3_t		offset;
 
+	if (!ent->client)
+		return;
+
 	if (!(ent->client->buttons & BUTTON_ATTACK) ||
 		//arena
-                ent->takedamage == DAMAGE_NO ||
-					   (ent->client && arenas[ent->client->resp.context].game_state != GAME_ON))
+		ent->takedamage == DAMAGE_NO || (ent->client && arenas[ent->client->resp.context].game_state != GAME_ON))
 
 	{
 		ent->client->machinegun_shots = 0;

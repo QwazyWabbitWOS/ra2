@@ -283,7 +283,7 @@ void ED_CallSpawn (edict_t *ent)
 
 	if (!ent->classname)
 	{
-		gi.dprintf ("ED_CallSpawn: NULL classname\n");
+		gi.dprintf("%s: NULL classname\n", __func__);
 		return;
 	}
 
@@ -308,7 +308,7 @@ void ED_CallSpawn (edict_t *ent)
 			return;
 		}
 	}
-	gi.dprintf ("%s doesn't have a spawn function\n", ent->classname);
+	gi.dprintf("\"%s\" doesn't have a spawn function\n", ent->classname);
 }
 
 /*
@@ -319,17 +319,17 @@ ED_NewString
 char *ED_NewString (char *string)
 {
 	char	*newb, *new_p;
-	int		i,l;
+	int		i, length;
 	
-	l = strlen(string) + 1;
+	length = (int)strlen(string) + 1;
 
-	newb = gi.TagMalloc (l, TAG_LEVEL);
+	newb = gi.TagMalloc(length, TAG_LEVEL);
 
 	new_p = newb;
 
-	for (i=0 ; i< l ; i++)
+	for (i = 0; i < length; i++)
 	{
-		if (string[i] == '\\' && i < l-1)
+		if (string[i] == '\\' && i < length - 1)
 		{
 			i++;
 			if (string[i] == 'n')
@@ -377,7 +377,9 @@ void ED_ParseField (char *key, char *value, edict_t *ent)
 				*(char **)(b+f->ofs) = ED_NewString (value);
 				break;
 			case F_VECTOR:
-				sscanf (value, "%f %f %f", &vec[0], &vec[1], &vec[2]);
+				if (sscanf(value, "%f %f %f", &vec[0], &vec[1], &vec[2]) != 3) {
+					gi.dprintf("WARNING: Vector field incomplete in %s, map: %s, field: %s\n", __func__, level.mapname, f->name);
+				}
 				((float *)(b+f->ofs))[0] = vec[0];
 				((float *)(b+f->ofs))[1] = vec[1];
 				((float *)(b+f->ofs))[2] = vec[2];
@@ -396,11 +398,13 @@ void ED_ParseField (char *key, char *value, edict_t *ent)
 				break;
 			case F_IGNORE:
 				break;
+			default:
+				break;
 			}
 			return;
 		}
 	}
-	gi.dprintf ("%s is not a field\n", key);
+	gi.dprintf("%s: %s is not a field\n", __func__, key);
 }
 
 /*
@@ -557,17 +561,22 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 		com_token = COM_Parse (&entities);
 		if (!entities)
 			break;
-		if (com_token[0] != '{')
-			gi.error ("ED_LoadFromFile: found %s when expecting {",com_token);
+		if (com_token[0] != '{') {
+			gi.error("ED_LoadFromFile: found %s when expecting {", com_token);
+			exit(1); //QW// can't happen
+		}
 
 		if (!ent)
 			ent = g_edicts;
 		else
 			ent = G_Spawn ();
+
 		entities = ED_ParseEdict (entities, ent);
 
 		// yet another map hack
-		if (!stricmp(level.mapname, "command") && !stricmp(ent->classname, "trigger_once") && !stricmp(ent->model, "*27"))
+		if (ent && !strcmp(level.mapname, "command") &&
+			!strcmp(ent->classname, "trigger_once") &&
+			!strcmp(ent->model, "*27"))
 			ent->spawnflags &= ~SPAWNFLAG_NOT_HARD;
 
 		// remove things (except the world) from different skill levels or deathmatch
@@ -610,7 +619,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 	G_FindTeams ();
 
 	PlayerTrail_Init ();
-	GSLogNewmap();//gslog arena
+	//GSLogNewmap();//gslog arena
 
 }
 
@@ -836,10 +845,10 @@ void SP_worldspawn (edict_t *ent)
 	if (ent->message && ent->message[0])
 	{
 		gi.configstring (CS_NAME, ent->message);
-		strncpy (level.level_name, ent->message, sizeof(level.level_name));
+		Q_strncpyz (level.level_name, sizeof level.level_name, ent->message);
 	}
 	else
-		strncpy (level.level_name, level.mapname, sizeof(level.level_name));
+		Q_strncpyz (level.level_name, sizeof level.level_name, level.mapname);
 
 	if (st.sky && st.sky[0])
 		gi.configstring (CS_SKY, st.sky);

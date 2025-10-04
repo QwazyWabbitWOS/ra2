@@ -13,11 +13,9 @@ is not a staircase.
 
 =============
 */
-int c_yes, c_no;
-
 qboolean M_CheckBottom (edict_t *ent)
 {
-	vec3_t	mins, maxs, start, stop;
+	vec3_t	mins = { 0 }, maxs = { 0 }, start = { 0 }, stop = { 0 };
 	trace_t	trace;
 	int		x, y;
 	float	mid, bottom;
@@ -38,19 +36,17 @@ qboolean M_CheckBottom (edict_t *ent)
 				goto realcheck;
 		}
 
-	c_yes++;
 	return true;		// we got out easy
 
 realcheck:
-	c_no++;
 //
 // check it for real...
 //
 	start[2] = mins[2];
 	
 // the midpoint must be within 16 of the bottom
-	start[0] = stop[0] = (mins[0] + maxs[0])*0.5;
-	start[1] = stop[1] = (mins[1] + maxs[1])*0.5;
+	start[0] = stop[0] = (mins[0] + maxs[0]) * 0.5f;
+	start[1] = stop[1] = (mins[1] + maxs[1]) * 0.5f;
 	stop[2] = start[2] - 2*STEPSIZE;
 	trace = gi.trace (start, vec3_origin, vec3_origin, stop, ent, MASK_MONSTERSOLID);
 
@@ -73,7 +69,6 @@ realcheck:
 				return false;
 		}
 
-	c_yes++;
 	return true;
 }
 
@@ -93,11 +88,11 @@ pr_global_struct->trace_normal is set to the normal of the blocking wall
 qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 {
 	float		dz;
-	vec3_t		oldorg, neworg, end;
+	vec3_t		oldorg = { 0 }, neworg = { 0 }, end = { 0 };
 	trace_t		trace;
 	int			i;
 	float		stepsize;
-	vec3_t		test;
+	vec3_t		test = { 0 };
 	int			contents;
 
 // try the move	
@@ -333,7 +328,7 @@ facing it.
 */
 qboolean SV_StepDirection (edict_t *ent, float yaw, float dist)
 {
-	vec3_t		move, oldorigin;
+	vec3_t		move = { 0 }, oldorigin = { 0 };
 	float		delta;
 	
 	ent->ideal_yaw = yaw;
@@ -384,14 +379,14 @@ SV_NewChaseDir
 void SV_NewChaseDir (edict_t *actor, edict_t *enemy, float dist)
 {
 	float	deltax,deltay;
-	float	d[3];
+	float	d[3] = { 0 };
 	float	tdir, olddir, turnaround;
 
 	//FIXME: how did we get here with no enemy
 	if (!enemy)
 		return;
 
-	olddir = anglemod( (int)(actor->ideal_yaw/45)*45 );
+	olddir = anglemod((actor->ideal_yaw / 45) * 45.0f);
 	turnaround = anglemod(olddir - 180);
 
 	deltax = enemy->s.origin[0] - actor->s.origin[0];
@@ -422,7 +417,7 @@ void SV_NewChaseDir (edict_t *actor, edict_t *enemy, float dist)
 	}
 
 // try other directions
-	if ( ((rand()&3) & 1) ||  abs(deltay)>abs(deltax))
+	if (((rand() & 3) & 1) || fabsf(deltay) > fabsf(deltax))
 	{
 		tdir=d[1];
 		d[1]=d[2];
@@ -522,7 +517,7 @@ M_walkmove
 */
 qboolean M_walkmove (edict_t *ent, float yaw, float dist)
 {
-	vec3_t	move;
+	vec3_t	move = { 0 };
 	
 	if (!ent->groundentity && !(ent->flags & (FL_FLY|FL_SWIM)))
 		return false;

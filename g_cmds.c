@@ -421,32 +421,32 @@ Drop an inventory item
 */
 void Cmd_Drop_f (edict_t *ent)
 {
-	int			index;
-	gitem_t		*it;
-	char		*s;
+	//int			index;
+	//gitem_t		*it;
+	//char		*s;
 
 	//arena
 	return; //no drops in arena
-	s = gi.args();
-	it = FindItem (s);
-	if (!it)
-	{
-		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
-		return;
-	}
-	if (!it->drop)
-	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
-		return;
-	}
-	index = ITEM_INDEX(it);
-	if (!ent->client->pers.inventory[index])
-	{
-		gi.cprintf (ent, PRINT_HIGH, "Out of item: %s\n", s);
-		return;
-	}
+	//s = gi.args();
+	//it = FindItem (s);
+	//if (!it)
+	//{
+	//	gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
+	//	return;
+	//}
+	//if (!it->drop)
+	//{
+	//	gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
+	//	return;
+	//}
+	//index = ITEM_INDEX(it);
+	//if (!ent->client->pers.inventory[index])
+	//{
+	//	gi.cprintf (ent, PRINT_HIGH, "Out of item: %s\n", s);
+	//	return;
+	//}
 
-	it->drop (ent, it);
+	//it->drop (ent, it);
 }
 
 
@@ -457,7 +457,7 @@ Cmd_Inven_f
 */
 void Cmd_Inven_f (edict_t *ent)
 {
-	int			i;
+	//int			i;
 	gclient_t	*cl;
 
 	cl = ent->client;
@@ -471,22 +471,22 @@ void Cmd_Inven_f (edict_t *ent)
 //below is unused in arena
 
 //	cl->showscores = false;
-	cl->showhelp = false;
-
-	if (cl->showinventory)
-	{
-		cl->showinventory = false;
-		return;
-	}
-
-	cl->showinventory = true;
-
-	gi.WriteByte (svc_inventory);
-	for (i=0 ; i<MAX_ITEMS ; i++)
-	{
-		gi.WriteShort (cl->pers.inventory[i]);
-	}
-	gi.unicast (ent, true);
+//	cl->showhelp = false;
+//
+//	if (cl->showinventory)
+//	{
+//		cl->showinventory = false;
+//		return;
+//	}
+//
+//	cl->showinventory = true;
+//
+//	gi.WriteByte (svc_inventory);
+//	for (i=0 ; i<MAX_ITEMS ; i++)
+//	{
+//		gi.WriteShort (cl->pers.inventory[i]);
+//	}
+//	gi.unicast (ent, true);
 }
 
 /*
@@ -628,7 +628,7 @@ Cmd_InvDrop_f
 */
 void Cmd_InvDrop_f (edict_t *ent)
 {
-	gitem_t		*it;
+	//gitem_t		*it;
 
 	//menu
 	if (ent->client->showmenu)
@@ -636,23 +636,25 @@ void Cmd_InvDrop_f (edict_t *ent)
 		UseMenu(ent, 0);
 		return;
 	}
-//arena
+	
+	//arena
 	return; //no drops in arena
-	ValidateSelectedItem (ent);
 
-	if (ent->client->pers.selected_item == -1)
-	{
-		gi.cprintf (ent, PRINT_HIGH, "No item to drop.\n");
-		return;
-	}
+	//ValidateSelectedItem (ent);
 
-	it = &itemlist[ent->client->pers.selected_item];
-	if (!it->drop)
-	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
-		return;
-	}
-	it->drop (ent, it);
+	//if (ent->client->pers.selected_item == -1)
+	//{
+	//	gi.cprintf (ent, PRINT_HIGH, "No item to drop.\n");
+	//	return;
+	//}
+
+	//it = &itemlist[ent->client->pers.selected_item];
+	//if (!it->drop)
+	//{
+	//	gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
+	//	return;
+	//}
+	//it->drop (ent, it);
 }
 
 /*
@@ -910,7 +912,7 @@ void ClientCommand (edict_t *ent)
 {
 	char	*cmd;
 	//arena
-	arena_link_t *p;
+	//arena_link_t *p;
 
 	if (!ent->client)
 		return;		// not fully in game yet

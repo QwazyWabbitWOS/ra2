@@ -157,10 +157,10 @@ static int CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int damag
 	gclient_t	*client;
 	int			save;
 	int			power_armor_type;
-	int			index;
+	int			index = 0;
 	int			damagePerCell;
 	int			pa_te_type;
-	int			power;
+	int			power = 0;
 	int			power_used;
 
 	if (!damage)
@@ -377,7 +377,7 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	int			psave;
 	int			te_sparks;
 
-	if (!targ->takedamage)
+	if (!targ->inuse || !targ->takedamage)
 		return;
 
 	//arena -- keep track of last person to hit you
@@ -522,8 +522,7 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	if (OnSameTeam (targ, attacker) && !(dflags & DAMAGE_NO_PROTECTION)) {
 		if(arenas[targ->client->resp.context].settings.healthprotect == 1) {
 			return;
-		} else if (arenas[targ->client->resp.context].settings.healthprotect == 2 &&
-			targ != attacker) {
+		} else if (arenas[targ->client->resp.context].settings.healthprotect == 2 && targ != attacker) {
 			return;
 		} else {
 				mod |= MOD_FRIENDLY_FIRE;

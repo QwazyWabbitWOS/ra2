@@ -190,14 +190,14 @@ char	entry[1024];
 	}
 
 	string[0] = 0;
-	stringlength = strlen(string);
+	stringlength = (int)strlen(string);
 
 	
 	// make a header for the data 
 	Com_sprintf(entry, sizeof(entry), 
 		"xv 0 yv 32 string2 \"Frags Ping   Name        Team       A\" "
 		"xv 0 yv 40 string2 \"›››››››››››››››››››››››››››››››››››››\" "); 
-	j = strlen(entry); 
+	j = (int)strlen(entry); 
 	if (stringlength + j < 1024) 
 	{ 
 		strcpy (string + stringlength, entry); 
@@ -227,7 +227,7 @@ char	entry[1024];
 		Com_sprintf(entry, sizeof(entry), 
 			"xv 8 yv %i string2 \"%s\"", y,tempentry); 
 		
-		j = strlen(entry); 
+		j = (int)strlen(entry); 
 		if (stringlength + j > 1024) 
 			break; 
 		strcpy (string + stringlength, entry); 
@@ -301,11 +301,11 @@ void Arena_ScoreboardMessage(edict_t *ent)
 	// now teams are sorted
 	// build the scoreboard
 	string[0] = 0;
-	stringlength = strlen(string);
+	stringlength = (int)strlen(string);
 
 	Com_sprintf(entry, sizeof(entry),
 		"xv 0 yv 40 string2 \"Teams\" xv 160 string2 \"Players\" ");
-	j = strlen(entry);
+	j = (int)strlen(entry);
 	strcpy (string + stringlength, entry);
 	stringlength += j;
 
@@ -322,7 +322,7 @@ void Arena_ScoreboardMessage(edict_t *ent)
 		Com_sprintf(entry, sizeof(entry),
 			"xv 0 yv %d string2 \"%s\" ",
 			40 + linenum * 8, p_name);
-		j = strlen(entry);
+		j = (int)strlen(entry);
 		if (stringlength + j > 1024)
 			break;
 		strcpy (string + stringlength, entry);
@@ -364,7 +364,7 @@ void Arena_ScoreboardMessage(edict_t *ent)
 			Com_sprintf(entry, sizeof(entry),
 				"xv 160 yv %d string2 \"%s\" ",
 				40 + linenum * 8, p_name);
-			j = strlen(entry);
+			j = (int)strlen(entry);
 			if (stringlength + j > 1024)
 				break;
 			strcpy (string + stringlength, entry);
@@ -449,7 +449,7 @@ void Pickup_ScoreboardMessage(edict_t *ent)
 	}
 
 	string[0] = 0;
-	stringlength = strlen(string);
+	stringlength = (int)strlen(string);
 
 	// put the two teams at the top
 	if(redscore < 0) redscore = 0;
@@ -457,7 +457,7 @@ void Pickup_ScoreboardMessage(edict_t *ent)
 	Com_sprintf(entry, sizeof(entry),
 		"xv 0 yv 40 string2 \"Team Red  : %d\" xv 160 yv 40 string2 \"Team Blue : %d\" ",
 		redscore, bluescore);
-	j = strlen(entry);
+	j = (int)strlen(entry);
 //		if (stringlength + j > 1024)
 //			break;
 	strcpy (string + stringlength, entry);
@@ -480,7 +480,7 @@ void Pickup_ScoreboardMessage(edict_t *ent)
 				Com_sprintf(entry, sizeof(entry),
 				"xv 0 yv %d string2 \"%2d %3d %.12s\" ",
 					i * 8 + 48, cl->resp.score, cl->ping, p_name);
-			j = strlen(entry);
+			j = (int)strlen(entry);
 			if (stringlength + j > 1024)
 				break;
 			strcpy (string + stringlength, entry);
@@ -498,7 +498,7 @@ void Pickup_ScoreboardMessage(edict_t *ent)
 			Com_sprintf(entry, sizeof(entry),
 				"xv 160 yv %d string2 \"%2d %3d %.12s\" ",
 				i * 8 + 48, cl->resp.score, cl->ping, p_name);
-			j = strlen(entry);
+			j = (int)strlen(entry);
 			if (stringlength + j > 1024)
 				break;
 			strcpy (string + stringlength, entry);
@@ -695,7 +695,7 @@ G_SetStats
 void G_SetStats (edict_t *ent)
 {
 	gitem_t		*item;
-	int			index, cells;
+	int			index, cells = 0;
 	int			power_armor_type;
 // arena
 	char	s[256];

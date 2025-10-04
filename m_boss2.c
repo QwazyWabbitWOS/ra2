@@ -37,8 +37,8 @@ void Boss2Rocket (edict_t *self)
 {
 	vec3_t	forward, right;
 	vec3_t	start;
-	vec3_t	dir;
-	vec3_t	vec;
+	vec3_t	dir = { 0 };
+	vec3_t	vec = { 0 };
 
 	AngleVectors (self->s.angles, forward, right, NULL);
 
@@ -83,7 +83,7 @@ void boss2_firebullet_right (edict_t *self)
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_R1], forward, right, start);
 
-	VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+	VectorMA(self->enemy->s.origin, -0.2f, self->enemy->velocity, target);
 	target[2] += self->enemy->viewheight;
 	VectorSubtract (target, start, forward);
 	VectorNormalize (forward);
@@ -99,7 +99,7 @@ void boss2_firebullet_left (edict_t *self)
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_L1], forward, right, start);
 
-	VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+	VectorMA(self->enemy->s.origin, -0.2f, self->enemy->velocity, target);
 
 	target[2] += self->enemy->viewheight;
 	VectorSubtract (target, start, forward);
@@ -134,127 +134,127 @@ void Boss2MachineGun (edict_t *self)
 
 mframe_t boss2_frames_stand [] =
 {
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL}
 };
 mmove_t	boss2_move_stand = {FRAME_stand30, FRAME_stand50, boss2_frames_stand, NULL};
 
 mframe_t boss2_frames_fidget [] =
 {
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL},
+	{ai_stand, 0, NULL}
 };
 mmove_t boss2_move_fidget = {FRAME_stand1, FRAME_stand30, boss2_frames_fidget, NULL};
 
 mframe_t boss2_frames_walk [] =
 {
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL,
-	ai_walk,	8,	NULL
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL},
+	{ai_walk,	8,	NULL}
 };
 mmove_t boss2_move_walk = {FRAME_walk1, FRAME_walk20, boss2_frames_walk, NULL};
 
 
 mframe_t boss2_frames_run [] =
 {
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL,
-	ai_run,	8,	NULL
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL},
+	{ai_run,	8,	NULL}
 };
 mmove_t boss2_move_run = {FRAME_walk1, FRAME_walk20, boss2_frames_run, NULL};
 
 mframe_t boss2_frames_attack_pre_mg [] =
 {
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	boss2_attack_mg
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	boss2_attack_mg}
 };
 mmove_t boss2_move_attack_pre_mg = {FRAME_attack1, FRAME_attack9, boss2_frames_attack_pre_mg, NULL};
 
@@ -262,133 +262,133 @@ mmove_t boss2_move_attack_pre_mg = {FRAME_attack1, FRAME_attack9, boss2_frames_a
 // Loop this
 mframe_t boss2_frames_attack_mg [] =
 {
-	ai_charge,	1,	Boss2MachineGun,
-	ai_charge,	1,	Boss2MachineGun,
-	ai_charge,	1,	Boss2MachineGun,
-	ai_charge,	1,	Boss2MachineGun,
-	ai_charge,	1,	Boss2MachineGun,
-	ai_charge,	1,	boss2_reattack_mg
+	{ai_charge,	1,	Boss2MachineGun},
+	{ai_charge,	1,	Boss2MachineGun},
+	{ai_charge,	1,	Boss2MachineGun},
+	{ai_charge,	1,	Boss2MachineGun},
+	{ai_charge,	1,	Boss2MachineGun},
+	{ai_charge,	1,	boss2_reattack_mg}
 };
 mmove_t boss2_move_attack_mg = {FRAME_attack10, FRAME_attack15, boss2_frames_attack_mg, NULL};
 
 mframe_t boss2_frames_attack_post_mg [] =
 {
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL}
 };
 mmove_t boss2_move_attack_post_mg = {FRAME_attack16, FRAME_attack19, boss2_frames_attack_post_mg, boss2_run};
 
 mframe_t boss2_frames_attack_rocket [] =
 {
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_move,	-20,	Boss2Rocket,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL,
-	ai_charge,	1,	NULL
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_move,	-20,	Boss2Rocket},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL},
+	{ai_charge,	1,	NULL}
 };
 mmove_t boss2_move_attack_rocket = {FRAME_attack20, FRAME_attack40, boss2_frames_attack_rocket, boss2_run};
 
 mframe_t boss2_frames_pain_heavy [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t boss2_move_pain_heavy = {FRAME_pain2, FRAME_pain19, boss2_frames_pain_heavy, boss2_run};
 
 mframe_t boss2_frames_pain_light [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL}
 };
 mmove_t boss2_move_pain_light = {FRAME_pain20, FRAME_pain23, boss2_frames_pain_light, boss2_run};
 
 mframe_t boss2_frames_death [] =
 {
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	NULL,
-	ai_move,	0,	BossExplode
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	BossExplode}
 };
 mmove_t boss2_move_death = {FRAME_death2, FRAME_death50, boss2_frames_death, boss2_dead};
 
@@ -412,7 +412,7 @@ void boss2_walk (edict_t *self)
 
 void boss2_attack (edict_t *self)
 {
-	vec3_t	vec;
+	vec3_t	vec = { 0 };
 	float	range;
 
 	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
@@ -520,8 +520,8 @@ void boss2_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 
 qboolean Boss2_CheckAttack (edict_t *self)
 {
-	vec3_t	spot1, spot2;
-	vec3_t	temp;
+	vec3_t	spot1 = { 0 }, spot2 = { 0 };
+	vec3_t	temp = { 0 };
 	float	chance;
 	trace_t	tr;
 	qboolean	enemy_infront;
@@ -552,7 +552,7 @@ qboolean Boss2_CheckAttack (edict_t *self)
 
 
 	// melee attack
-	if (enemy_range == RANGE_MELEE)
+	if (enemy_range == RANGE_MELEE && enemy_infront)
 	{
 		if (self->monsterinfo.melee)
 			self->monsterinfo.attack_state = AS_MELEE;
@@ -573,19 +573,19 @@ qboolean Boss2_CheckAttack (edict_t *self)
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 	{
-		chance = 0.4;
+		chance = 0.4f;
 	}
 	else if (enemy_range == RANGE_MELEE)
 	{
-		chance = 0.8;
+		chance = 0.8f;
 	}
 	else if (enemy_range == RANGE_NEAR)
 	{
-		chance = 0.8;
+		chance = 0.8f;
 	}
 	else if (enemy_range == RANGE_MID)
 	{
-		chance = 0.8;
+		chance = 0.8f;
 	}
 	else
 	{
